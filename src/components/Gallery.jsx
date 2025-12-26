@@ -1,17 +1,19 @@
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { useInView } from "react-intersection-observer"
-import { ZoomIn } from "lucide-react"
+import { useState } from "react"
+import { X } from "lucide-react"
 
 export default function GallerySection() {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: false })
+  const [selectedImage, setSelectedImage] = useState(null)
 
   const galleryItems = [
-    { id: 1, title: "Championship Tables", query: "professional luxury billiards pool table with premium felt" },
-    { id: 2, title: "Lounge Seating", query: "luxury lounge modern seating leather chairs elegant interior" },
-    { id: 3, title: "Premium Bar", query: "high-end craft cocktails bar counter elegant nightclub" },
-    { id: 4, title: "Tournament Setup", query: "professional billiards tournament stage lighting competitive" },
-    { id: 5, title: "VIP Private Space", query: "exclusive private luxury event venue chandelier gold" },
-    { id: 6, title: "Evening Ambiance", query: "luxury lounge interior night lighting elegant sophisticated" },
+    { id: 1, title: "Championship Tables", image: "/images/1.jpg" },
+    { id: 2, title: "Lounge Seating", image: "/images/2.jpg" },
+    { id: 3, title: "Premium Bar", image: "/images/3.jpg" },
+    { id: 4, title: "Tournament Setup", image: "/images/4.jpg" },
+    { id: 5, title: "VIP Private Space", image: "/images/5.jpg" },
+    { id: 6, title: "Evening Ambiance", image: "/images/6.jpg" },
   ]
 
   const containerVariants = {
@@ -27,8 +29,18 @@ export default function GallerySection() {
     visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
   }
 
+  const openImage = (item) => {
+    setSelectedImage(item)
+    document.body.style.overflow = 'hidden' // Prevent background scrolling
+  }
+
+  const closeImage = () => {
+    setSelectedImage(null)
+    document.body.style.overflow = 'unset' // Restore scrolling
+  }
+
   return (
-    <section id="gallery" className="py-2 bg-black relative" ref={ref}>
+    <section id="gallery" className="py-20 bg-black relative" ref={ref}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -51,15 +63,15 @@ export default function GallerySection() {
               key={item.id}
               variants={itemVariants}
               whileHover={{ scale: 1.03, y: -5 }}
+              onClick={() => openImage(item)}
               className="group relative overflow-hidden rounded-xl aspect-square cursor-pointer"
             >
               <img
-                src={`/.jpg?height=400&width=400&query=${encodeURIComponent(item.query)}`}
+                src={item.image}
                 alt={item.title}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-end justify-between p-6">
-                <ZoomIn className="w-6 h-6 text-amber-400" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-end justify-end p-6">
                 <div>
                   <h3 className="text-white font-bold text-lg">{item.title}</h3>
                 </div>
@@ -69,7 +81,58 @@ export default function GallerySection() {
           ))}
         </motion.div>
       </div>
+
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={closeImage}
+            className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 cursor-pointer"
+          >
+            {/* Close Button */}
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              onClick={(e) => {
+                e.stopPropagation()
+                closeImage()
+              }}
+              className="absolute top-4 right-4 z-50 w-12 h-12 rounded-full bg-amber-500/20 hover:bg-amber-500/40 border border-amber-500/50 flex items-center justify-center text-white transition-all"
+            >
+              <X size={24} />
+            </motion.button>
+
+            {/* Image Container */}
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-7xl max-h-[90vh] w-full h-full flex items-center justify-center"
+            >
+              <img
+                src={selectedImage.image}
+                alt={selectedImage.title}
+                className="max-w-full max-h-full w-auto h-auto object-contain rounded-lg"
+                style={{ imageRendering: 'high-quality' }}
+              />
+              {/* Title Overlay */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/70 backdrop-blur-sm px-6 py-3 rounded-lg border border-amber-500/30"
+              >
+                <h3 className="text-white font-bold text-xl text-center">{selectedImage.title}</h3>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }
-

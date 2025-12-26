@@ -136,8 +136,8 @@ export default function Footer() {
                   transition={{ duration: 0.2 }}
                 />
                 <div>
-                  <p className="text-white font-bold text-sm">LEGENDS</p>
-                  <p className="text-amber-400 text-xs">ACADEMY</p>
+                  <p className="text-white font-billiard text-sm">LEGENDS</p>
+                  <p className="text-amber-400 font-billiard text-xs">ACADEMY</p>
                 </div>
               </Link>
               <p className="text-gray-400 text-sm leading-relaxed">

@@ -44,8 +44,8 @@ export default function Header() {
               transition={{ duration: 0.2 }}
             />
             <div className="hidden sm:block">
-              <p className="text-white font-bold text-sm">LEGENDS</p>
-              <p className="text-amber-400 text-xs">ACADEMY</p>
+              <p className="text-white font-logo-curved text-lg leading-tight">Legends</p>
+              <p className="text-amber-400 font-logo-curved text-base leading-tight">Academy</p>
             </div>
           </Link>
         </motion.div>

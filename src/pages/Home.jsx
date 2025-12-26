@@ -65,7 +65,7 @@ export default function Home() {
       
       <div className="relative z-10">
         <Header />
-        <div className="pt-2">
+        <div>
           <HeroSection />
           <VenueShowcase />
           <AboutSection />

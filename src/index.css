@@ -122,3 +122,16 @@
   }
 }
 
+@layer utilities {
+  .font-billiard {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+  .font-logo-curved {
+    font-family: 'Great Vibes', cursive;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+  }
+}
+

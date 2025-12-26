@@ -1,6 +1,7 @@
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { Check } from "lucide-react"
+import { Link } from "react-router-dom"
 
 export default function PricingSection() {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: false })
@@ -8,6 +9,7 @@ export default function PricingSection() {
   const pricingCards = [
     {
       name: "Casual Play",
+      slug: "casual",
       price: "$15",
       period: "/hour",
       description: "Perfect for casual games",
@@ -16,6 +18,7 @@ export default function PricingSection() {
     },
     {
       name: "Premium Member",
+      slug: "premium",
       price: "$30",
       period: "/hour",
       description: "The ultimate experience",
@@ -31,6 +34,7 @@ export default function PricingSection() {
     },
     {
       name: "Private Events",
+      slug: "private",
       price: "Custom",
       period: "pricing",
       description: "For your occasion",
@@ -105,15 +109,30 @@ export default function PricingSection() {
                 <span className="text-4xl font-bold text-amber-500">{card.price}</span>
                 <span className="text-gray-400 ml-2 text-sm">{card.period}</span>
               </div>
-              <button
-                className={`w-full py-2 rounded text-sm font-bold mb-6 transition-all uppercase tracking-widest ${
-                  card.highlighted
-                    ? "bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 hover:shadow-lg hover:shadow-amber-500/50"
-                    : "border border-amber-600/50 text-amber-500 hover:border-amber-500 hover:text-amber-400"
-                }`}
-              >
-                {card.highlighted ? "Become Member" : "Learn More"}
-              </button>
+              {card.highlighted ? (
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    const whatsappNumber = "212673848023"
+                    const message = encodeURIComponent("Hi! I'm interested in becoming a Premium Member at Legends Academy")
+                    window.open(`https://wa.me/${whatsappNumber}?text=${message}`, "_blank")
+                  }}
+                  className="w-full py-2 rounded text-sm font-bold mb-6 transition-all uppercase tracking-widest bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 hover:shadow-lg hover:shadow-amber-500/50"
+                >
+                  Become Member
+                </motion.button>
+              ) : (
+                <Link to={`/membership/${card.slug}`}>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="w-full py-2 rounded text-sm font-bold mb-6 transition-all uppercase tracking-widest border border-amber-600/50 text-amber-500 hover:border-amber-500 hover:text-amber-400"
+                  >
+                    Learn More
+                  </motion.button>
+                </Link>
+              )}
               <ul className="space-y-2">
                 {card.features.map((feature, j) => (
                   <li key={j} className="flex items-center gap-2 text-gray-300 text-sm">

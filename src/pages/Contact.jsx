@@ -1,11 +1,17 @@
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
+import { useEffect } from "react"
 import { Phone, Mail, MapPin, Clock, MessageCircle, Instagram, Facebook } from "lucide-react"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 
 export default function ContactPage() {
-  const { ref, inView } = useInView({ threshold: 0.2 })
+  const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: false })
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [])
   
   const whatsappNumber = "212673848023"
   const phoneNumber = "0673-848023"
@@ -23,7 +29,7 @@ export default function ContactPage() {
       label: "Email",
       value: "contact@legendsacademy.ma",
       link: "mailto:contact@legendsacademy.ma",
-      color: "from-blue-500 to-blue-600",
+      color: "from-amber-500 to-amber-600",
     },
     {
       icon: MapPin,
@@ -51,7 +57,7 @@ export default function ContactPage() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.05,
       },
     },
   }
@@ -61,18 +67,19 @@ export default function ContactPage() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6 },
+      transition: { duration: 0.3 },
     },
   }
 
   return (
     <div className="text-white min-h-screen relative overflow-x-hidden">
-      {/* Gradient background - Blue and Black like home page */}
-      <div className="fixed inset-0 bg-gradient-to-b from-blue-900/40 via-blue-950/60 to-black z-0" />
+      {/* Gradient background - More black than blue like Membership */}
+      <div className="fixed inset-0 bg-gradient-to-b from-black via-black to-black z-0" />
+      <div className="fixed inset-0 bg-gradient-to-b from-blue-950/10 via-blue-900/5 to-transparent z-0" />
       
-      {/* Animated gradient orbs */}
+      {/* Subtle animated gradient orbs */}
       <motion.div
-        className="absolute top-20 left-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl z-[1]"
+        className="absolute top-20 left-10 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl z-[1]"
         animate={{ 
           y: [0, 50, 0],
           x: [0, 30, 0],
@@ -81,7 +88,7 @@ export default function ContactPage() {
         transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY }}
       />
       <motion.div
-        className="absolute bottom-20 right-10 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl z-[1]"
+        className="absolute bottom-20 right-10 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl z-[1]"
         animate={{ 
           y: [0, -50, 0],
           x: [0, -30, 0],
@@ -89,36 +96,36 @@ export default function ContactPage() {
         }}
         transition={{ duration: 12, repeat: Number.POSITIVE_INFINITY }}
       />
-      <motion.div
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-3xl z-[1]"
-        animate={{ 
-          scale: [1, 1.1, 1],
-          opacity: [0.3, 0.5, 0.3]
-        }}
-        transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY }}
-      />
 
       <div className="relative z-10">
         <Header />
         
-        {/* Hero Section */}
-        <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden pt-24">
+        {/* Hero Section - Enhanced */}
+        <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden pt-24">
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent z-0" />
+          
           <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.5 }}
             >
+              {/* Logo with glow effect */}
               <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                className="mb-6 flex justify-center"
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
+                className="mb-8 flex justify-center relative"
               >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-amber-500 to-amber-600 rounded-full blur-2xl opacity-30"
+                  animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY }}
+                />
                 <motion.img
                   src="/logo.jpg"
                   alt="Legends Academy Logo"
-                  className="h-32 w-32 md:h-40 md:w-40 rounded-full object-cover border-4 border-amber-400/30"
+                  className="relative h-32 w-32 md:h-40 md:w-40 rounded-full object-cover border-4 border-amber-300/30"
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 />
@@ -127,7 +134,7 @@ export default function ContactPage() {
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: 0.2 }}
                 className="text-amber-400 font-semibold mb-4 uppercase tracking-widest text-sm"
               >
                 Contactez-nous
@@ -136,7 +143,7 @@ export default function ContactPage() {
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
+                transition={{ delay: 0.3 }}
                 className="text-5xl md:text-7xl font-bold mb-6 text-white"
               >
                 Restons en <span className="text-amber-400">Contact</span>
@@ -145,15 +152,15 @@ export default function ContactPage() {
               <motion.div
                 initial={{ opacity: 0, width: 0 }}
                 animate={{ opacity: 1, width: "100%" }}
-                transition={{ delay: 0.6, duration: 1 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
                 className="h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent mb-6 max-w-md mx-auto"
               />
               
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 }}
-                className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed"
+                transition={{ delay: 0.5 }}
+                className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed"
               >
                 Rejoignez la communauté Legends Academy. Nous sommes là pour répondre à vos questions et rendre vos réservations simples et rapides.
               </motion.p>
@@ -161,9 +168,25 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* Contact Info & Map Section */}
-        <section ref={ref} className="py-20 relative overflow-hidden">
+        {/* Contact Info & Map Section - Enhanced */}
+        <section ref={ref} className="py-20 relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-transparent" />
+          
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-center mb-16"
+            >
+              <h2 className="text-4xl md:text-6xl font-bold text-white mb-4">
+                Informations de <span className="text-amber-400">Contact</span>
+              </h2>
+              <div className="h-1 w-24 bg-gradient-to-r from-amber-400 to-amber-600 mx-auto mb-6" />
+              <p className="text-gray-400 text-lg">Trouvez-nous facilement et contactez-nous</p>
+            </motion.div>
+
             <div className="grid lg:grid-cols-2 gap-12 items-start">
               {/* Left Side - Contact Info Cards */}
               <motion.div
@@ -172,14 +195,6 @@ export default function ContactPage() {
                 animate={inView ? "visible" : "hidden"}
                 className="space-y-6"
               >
-                <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-bold text-white mb-2">
-                  Informations de <span className="text-amber-400">Contact</span>
-                </motion.h2>
-                <motion.div
-                  variants={itemVariants}
-                  className="h-1 w-20 bg-gradient-to-r from-amber-400 to-amber-600 mb-8"
-                />
-
                 {contactInfo.map((info, i) => {
                   const Icon = info.icon
                   return (
@@ -187,72 +202,75 @@ export default function ContactPage() {
                       key={i}
                       href={info.link}
                       variants={itemVariants}
-                      whileHover={{ scale: 1.02, x: 10 }}
+                      whileHover={{ y: -5, scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="group flex gap-4 p-6 rounded-xl bg-gradient-to-r from-blue-950/40 to-blue-950/20 border border-blue-600/40 hover:border-blue-500/60 transition-all cursor-pointer relative overflow-hidden"
+                      className="group relative p-6 rounded-xl border transition-all cursor-pointer overflow-hidden bg-gradient-to-br from-black/60 to-black border-amber-600/20 hover:border-amber-500/50"
                     >
-                      {/* Effet de brillance au survol */}
+                      {/* Glow effect on hover */}
+                      <div className={`absolute inset-0 bg-gradient-to-r ${info.color} opacity-0 group-hover:opacity-10 rounded-xl transition-opacity blur-xl`} />
+                      
+                      {/* Shine effect */}
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
                       
-                      <div className="flex-shrink-0 relative z-10">
-                        <div className={`w-14 h-14 rounded-xl bg-gradient-to-r ${info.color} flex items-center justify-center text-white group-hover:scale-110 transition-transform`}>
-                          <Icon size={24} />
+                      <div className="relative flex items-start gap-4">
+                        <div className={`w-14 h-14 rounded-xl bg-gradient-to-r ${info.color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                          <Icon size={24} className="text-white" />
                         </div>
-                      </div>
-                      <div className="relative z-10 flex-1">
-                        <h4 className="font-bold text-white text-base mb-1">{info.label}</h4>
-                        <p className="text-gray-300 text-sm">{info.value}</p>
+                        <div className="flex-1">
+                          <h4 className="font-bold text-white text-lg mb-1">{info.label}</h4>
+                          <p className="text-gray-300 text-base">{info.value}</p>
+                        </div>
                       </div>
                     </motion.a>
                   )
                 })}
 
-                {/* Boutons d'action */}
+                {/* Action Buttons */}
                 <motion.div
                   variants={itemVariants}
                   className="flex flex-col sm:flex-row gap-4 mt-8"
                 >
                   <motion.button
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{ scale: 1.08, boxShadow: "0 0 20px rgba(34, 197, 94, 0.7)" }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleWhatsAppReserve}
-                    className="flex-1 px-6 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-3 uppercase tracking-widest text-sm"
+                    className="px-6 py-2.5 text-xs font-bold uppercase tracking-widest bg-gradient-to-r from-green-500 to-green-600 text-white rounded transition-all duration-300 flex items-center justify-center gap-2"
                   >
-                    <MessageCircle size={20} />
+                    <MessageCircle size={16} />
                     Réserver via WhatsApp
                   </motion.button>
                   
                   <motion.a
                     href={`tel:${phoneNumber.replace(/\s/g, "")}`}
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{ scale: 1.08, borderColor: "#FCD34D" }}
                     whileTap={{ scale: 0.95 }}
-                    className="flex-1 px-6 py-4 border-2 border-amber-500 text-amber-500 font-bold rounded-xl hover:bg-amber-500 hover:text-slate-950 transition-all flex items-center justify-center gap-3 uppercase tracking-widest text-sm"
+                    className="px-6 py-2.5 text-xs font-bold uppercase tracking-widest border-2 border-amber-600/50 text-amber-400 hover:border-amber-400 rounded transition-all duration-300 flex items-center justify-center gap-2"
                   >
-                    <Phone size={20} />
+                    <Phone size={16} />
                     Appeler maintenant
                   </motion.a>
                 </motion.div>
 
-                {/* Réseaux sociaux */}
+                {/* Social Links */}
                 <motion.div
                   variants={itemVariants}
                   className="flex gap-4 pt-4"
                 >
                   <motion.a
                     href="#"
-                    whileHover={{ scale: 1.2, rotate: 10 }}
+                    whileHover={{ scale: 1.2, rotate: 10, y: -5 }}
                     whileTap={{ scale: 0.9 }}
-                    className="w-12 h-12 rounded-lg bg-gradient-to-r from-pink-500 to-pink-600 flex items-center justify-center text-white transition-all"
+                    className="w-14 h-14 rounded-xl bg-gradient-to-r from-pink-500 to-pink-600 flex items-center justify-center text-white transition-all"
                   >
-                    <Instagram size={20} />
+                    <Instagram size={24} />
                   </motion.a>
                   <motion.a
                     href="#"
-                    whileHover={{ scale: 1.2, rotate: -10 }}
+                    whileHover={{ scale: 1.2, rotate: -10, y: -5 }}
                     whileTap={{ scale: 0.9 }}
-                    className="w-12 h-12 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-white transition-all"
+                    className="w-14 h-14 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center text-white transition-all"
                   >
-                    <Facebook size={20} />
+                    <Facebook size={24} />
                   </motion.a>
                 </motion.div>
               </motion.div>
@@ -264,7 +282,10 @@ export default function ContactPage() {
                 transition={{ duration: 0.8 }}
                 className="relative"
               >
-                <div className="relative bg-gradient-to-br from-blue-950/40 to-blue-950/20 rounded-2xl border border-blue-600/40 p-6 overflow-hidden">
+                {/* Background glow */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/20 to-amber-600/20 rounded-3xl blur-xl" />
+                
+                <div className="relative bg-gradient-to-br from-black/80 to-black rounded-2xl border-2 border-amber-500/30 p-6 overflow-hidden backdrop-blur-sm">
                   <div className="w-full h-[500px] rounded-xl overflow-hidden bg-slate-900/50 relative">
                     <iframe
                       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3323.123456789!2d-7.6123456!3d33.5923456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDM1JzMyLjQiTiA3wrAzNic0NC40Ilc!5e0!3m2!1sfr!2sma!4v1234567890"
@@ -281,14 +302,14 @@ export default function ContactPage() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={inView ? { opacity: 1, y: 0 } : {}}
                     transition={{ delay: 0.3 }}
-                    className="mt-4 flex items-center gap-3 p-4 rounded-lg bg-blue-950/30 border border-blue-600/30"
+                    className="mt-6 flex items-center gap-4 p-5 rounded-xl bg-gradient-to-r from-amber-950/40 to-black border border-amber-500/30"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
-                      <MapPin className="text-white" size={18} />
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 flex items-center justify-center flex-shrink-0">
+                      <MapPin className="text-white" size={20} />
                     </div>
                     <div>
-                      <p className="text-amber-400 text-sm font-semibold">Notre Localisation</p>
-                      <p className="text-gray-300 text-xs">Legends Academy, Maroc</p>
+                      <p className="text-amber-400 text-base font-semibold mb-1">Notre Localisation</p>
+                      <p className="text-gray-300 text-sm">Legends Academy, Maroc</p>
                     </div>
                   </motion.div>
                 </div>

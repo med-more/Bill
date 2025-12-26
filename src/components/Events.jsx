@@ -162,33 +162,6 @@ export default function EventsSection() {
           })}
         </motion.div>
 
-        {/* Newsletter CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.1 }}
-          viewport={{ once: true }}
-          className="mt-16 bg-gradient-to-r from-amber-500/10 to-emerald-500/10 border border-amber-500/20 rounded-lg p-8 text-center"
-        >
-          <h3 className="text-2xl font-bold text-white mb-3">Never Miss an Event</h3>
-          <p className="text-slate-300 mb-6">
-            Subscribe to our newsletter for exclusive event announcements and special offers.
-          </p>
-          <div className="flex gap-2 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="your@email.com"
-              className="flex-1 px-4 py-2 bg-slate-800/50 border border-amber-500/20 rounded text-white placeholder:text-slate-500 text-sm focus:outline-none focus:border-amber-500"
-            />
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-6 py-2 text-xs font-bold uppercase tracking-widest bg-amber-500 text-slate-950 rounded hover:bg-amber-600 transition-colors"
-            >
-              Subscribe
-            </motion.button>
-          </div>
-        </motion.div>
       </div>
     </section>
   )
