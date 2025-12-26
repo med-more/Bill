@@ -18,7 +18,7 @@ export default function HeroSection() {
   }
 
   return (
-    <section id="home" className="relative min-h-screen overflow-hidden flex items-center justify-center pt-20">
+    <section id="home" className="relative min-h-screen overflow-hidden flex items-center justify-center pt-12 md:pt-20">
       {/* Video Background - High Quality */}
       <div className="absolute inset-0 w-full h-full">
         <video
@@ -71,7 +71,7 @@ export default function HeroSection() {
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
+          transition={{ delay: 0, type: "spring", stiffness: 300, damping: 20 }}
           className="mb-6 flex justify-center"
         >
           <motion.img
@@ -86,7 +86,7 @@ export default function HeroSection() {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.05, duration: 0.4 }}
           className="text-amber-400 font-semibold mb-4 uppercase tracking-widest text-sm"
         >
           Experience Excellence
@@ -95,7 +95,7 @@ export default function HeroSection() {
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.1, duration: 0.5 }}
           className="text-5xl md:text-7xl font-bold mb-6 text-white"
         >
           LEGENDS <span className="text-amber-400">ACADEMY</span>
@@ -104,14 +104,14 @@ export default function HeroSection() {
         <motion.div
           initial={{ opacity: 0, width: 0 }}
           animate={{ opacity: 1, width: "100%" }}
-          transition={{ delay: 0.6, duration: 1 }}
+          transition={{ delay: 0.15, duration: 0.6 }}
           className="h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent mb-6"
         />
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
+          transition={{ delay: 0.2, duration: 0.4 }}
           className="text-lg text-gray-200 mb-10 max-w-2xl mx-auto leading-relaxed"
         >
           Premium Pool & Snooker Lounge | Coffee Drinks & Dining
@@ -120,7 +120,7 @@ export default function HeroSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
+          transition={{ delay: 0.25, duration: 0.4 }}
           className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
           <motion.button

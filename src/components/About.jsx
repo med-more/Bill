@@ -3,19 +3,19 @@ import { useInView } from "react-intersection-observer"
 import { Star, Users, Zap } from "lucide-react"
 
 export default function AboutSection() {
-  const { ref, inView } = useInView({ threshold: 0.2 })
+  const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: false })
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.2 },
+      transition: { staggerChildren: 0.05 },
     },
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   }
 
   const stats = [

@@ -3,7 +3,7 @@ import { useInView } from "react-intersection-observer"
 import { ZoomIn } from "lucide-react"
 
 export default function GallerySection() {
-  const { ref, inView } = useInView({ threshold: 0.2 })
+  const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: false })
 
   const galleryItems = [
     { id: 1, title: "Championship Tables", query: "professional luxury billiards pool table with premium felt" },
@@ -18,13 +18,13 @@ export default function GallerySection() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+      transition: { staggerChildren: 0.05, delayChildren: 0 },
     },
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
   }
 
   return (
@@ -44,7 +44,7 @@ export default function GallerySection() {
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
         >
           {galleryItems.map((item) => (
             <motion.div

@@ -3,7 +3,7 @@ import { useInView } from "react-intersection-observer"
 import { MapPin, Users, Trophy, Clock } from "lucide-react"
 
 export default function VenueShowcase() {
-  const { ref, inView } = useInView({ threshold: 0.2 })
+  const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: false })
 
   const features = [
     {
@@ -50,7 +50,7 @@ export default function VenueShowcase() {
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.1 }}
+            transition={{ delay: 0 }}
             className="rounded-2xl overflow-hidden aspect-video relative group"
           >
             <img
@@ -63,7 +63,7 @@ export default function VenueShowcase() {
               className="absolute bottom-6 left-6"
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.1 }}
             >
               <h3 className="text-2xl font-bold text-white">Main Hall</h3>
               <p className="text-amber-400 text-sm">Championship Tables & Lounge</p>
@@ -73,7 +73,7 @@ export default function VenueShowcase() {
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.05 }}
             className="rounded-2xl overflow-hidden aspect-video relative group"
           >
             <img
@@ -86,7 +86,7 @@ export default function VenueShowcase() {
               className="absolute bottom-6 left-6"
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.15 }}
             >
               <h3 className="text-2xl font-bold text-white">VIP Lounge</h3>
               <p className="text-amber-400 text-sm">Premium Bar & Private Events</p>
@@ -122,7 +122,7 @@ export default function VenueShowcase() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.15 }}
             className="rounded-xl overflow-hidden aspect-square relative group"
           >
             <img
@@ -138,7 +138,7 @@ export default function VenueShowcase() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.2 }}
             className="rounded-xl overflow-hidden aspect-square relative group"
           >
             <img
@@ -154,7 +154,7 @@ export default function VenueShowcase() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ delay: 0.6 }}
+            transition={{ delay: 0.25 }}
             className="rounded-xl overflow-hidden aspect-square relative group"
           >
             <img

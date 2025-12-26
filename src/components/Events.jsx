@@ -58,7 +58,7 @@ export default function EventsSection() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
+        staggerChildren: 0.05,
       },
     },
   }
@@ -68,7 +68,7 @@ export default function EventsSection() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6 },
+      transition: { duration: 0.3 },
     },
   }
 
@@ -85,7 +85,7 @@ export default function EventsSection() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.3 }}
           viewport={{ once: true }}
           className="text-center mb-16"
         >
@@ -166,7 +166,7 @@ export default function EventsSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
           viewport={{ once: true }}
           className="mt-16 bg-gradient-to-r from-amber-500/10 to-emerald-500/10 border border-amber-500/20 rounded-lg p-8 text-center"
         >

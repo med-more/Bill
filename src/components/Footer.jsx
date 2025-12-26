@@ -1,30 +1,13 @@
 import { motion } from "framer-motion"
-import { Facebook, Instagram, Twitter, Linkedin, MapPin, Phone, Mail, Clock, Award, Users, Trophy } from "lucide-react"
+import { Facebook, Instagram } from "lucide-react"
 import { Link } from "react-router-dom"
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
 
-  const footerLinks = [
-    { label: "Home", href: "#home" },
-    { label: "Services", href: "#services" },
-    { label: "Gallery", href: "#gallery" },
-    { label: "Events", href: "#events" },
-    { label: "Pricing", href: "#pricing" },
-    { label: "Contact", href: "/contact" },
-  ]
-
   const socialLinks = [
-    { icon: Facebook, href: "#" },
-    { icon: Instagram, href: "#" },
-    { icon: Twitter, href: "#" },
-    { icon: Linkedin, href: "#" },
-  ]
-
-  const features = [
-    { icon: Trophy, label: "Championship Venue" },
-    { icon: Users, label: "Premium Community" },
-    { icon: Award, label: "World Class Service" },
+    { icon: Instagram, href: "#", color: "from-pink-500 to-pink-600" },
+    { icon: Facebook, href: "#", color: "from-blue-500 to-blue-600" },
   ]
 
   const containerVariants = {
@@ -62,24 +45,101 @@ export default function Footer() {
       <div className="relative z-10">
         {/* Main Footer Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          {/* Mobile Layout */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="grid md:grid-cols-4 gap-8 mb-12"
+            className="md:hidden space-y-6 text-center"
+          >
+            {/* Logo */}
+            <motion.div variants={itemVariants} className="flex justify-center mb-4">
+              <Link to="/" className="flex items-center gap-3">
+                <motion.img
+                  src="/logo.jpg"
+                  alt="Legends Academy Logo"
+                  className="h-16 w-16 rounded-full object-cover border-2 border-amber-500/30"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.2 }}
+                />
+              </Link>
+            </motion.div>
+
+            {/* Description */}
+            <motion.p variants={itemVariants} className="text-gray-400 text-sm leading-relaxed max-w-md mx-auto">
+              Experience luxury billiards, premium coffee, and elegant dining in our world-class establishment.
+            </motion.p>
+
+            {/* Social Links */}
+            <motion.div variants={itemVariants} className="flex justify-center gap-4 pt-4">
+              {socialLinks.map((social, i) => {
+                const Icon = social.icon
+                return (
+                  <motion.a
+                    key={i}
+                    href={social.href}
+                    whileHover={{ scale: 1.2, rotate: 10 }}
+                    whileTap={{ scale: 0.9 }}
+                    className={`w-10 h-10 rounded-lg bg-gradient-to-r ${social.color} flex items-center justify-center text-white transition-all`}
+                  >
+                    <Icon size={18} />
+                  </motion.a>
+                )
+              })}
+            </motion.div>
+
+            {/* Divider */}
+            <motion.div
+              variants={itemVariants}
+              className="h-px bg-gradient-to-r from-transparent via-amber-500/30 to-transparent my-8"
+            />
+
+            {/* Copyright and Links */}
+            <motion.div variants={itemVariants} className="space-y-4">
+              <p className="text-gray-500 text-sm">
+                &copy; {currentYear} Legends Academy. All rights reserved.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4 text-gray-500 text-sm">
+                <Link to="/privacy-policy" className="hover:text-amber-400 transition-colors">
+                  Privacy Policy
+                </Link>
+                <Link to="/terms-of-service" className="hover:text-amber-400 transition-colors">
+                  Terms of Service
+                </Link>
+                <Link to="/sitemap" className="hover:text-amber-400 transition-colors">
+                  Sitemap
+                </Link>
+              </div>
+              <p className="text-amber-400 font-semibold text-sm">
+                Excellence • Precision • Legacy
+              </p>
+            </motion.div>
+          </motion.div>
+
+          {/* Desktop Layout */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="hidden md:grid md:grid-cols-4 gap-8 mb-12"
           >
             {/* Brand Section */}
             <motion.div variants={itemVariants} className="space-y-4">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center">
-                  <span className="text-slate-950 font-bold text-lg">LA</span>
-                </div>
+              <Link to="/" className="flex items-center gap-3 mb-4">
+                <motion.img
+                  src="/logo.jpg"
+                  alt="Legends Academy Logo"
+                  className="h-12 w-12 rounded-full object-cover border-2 border-amber-500/30"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.2 }}
+                />
                 <div>
                   <p className="text-white font-bold text-sm">LEGENDS</p>
                   <p className="text-amber-400 text-xs">ACADEMY</p>
                 </div>
-              </div>
+              </Link>
               <p className="text-gray-400 text-sm leading-relaxed">
                 Experience luxury billiards, premium coffee, and elegant dining in our world-class establishment.
               </p>
@@ -92,7 +152,7 @@ export default function Footer() {
                       href={social.href}
                       whileHover={{ scale: 1.2, rotate: 10 }}
                       whileTap={{ scale: 0.9 }}
-                      className="w-9 h-9 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-400 hover:bg-amber-500/40 transition-all"
+                      className={`w-9 h-9 rounded-lg bg-gradient-to-r ${social.color} flex items-center justify-center text-white transition-all`}
                     >
                       <Icon size={16} />
                     </motion.a>
@@ -105,32 +165,30 @@ export default function Footer() {
             <motion.div variants={itemVariants} className="space-y-4">
               <h3 className="font-bold text-white text-sm uppercase tracking-widest">Quick Links</h3>
               <ul className="space-y-2">
-                {footerLinks.map((link, i) => (
-                  <li key={i}>
-                    {link.href.startsWith('#') ? (
-                      <motion.a
-                        href={link.href}
-                        whileHover={{ x: 5 }}
-                        className="text-gray-400 hover:text-amber-400 text-sm transition-colors flex items-center gap-2"
-                      >
-                        <motion.span animate={{ scaleX: [0, 1] }} transition={{ duration: 0.3 }}>
-                          ▸
-                        </motion.span>
-                        {link.label}
-                      </motion.a>
-                    ) : (
-                      <Link
-                        to={link.href}
-                        className="text-gray-400 hover:text-amber-400 text-sm transition-colors flex items-center gap-2"
-                      >
-                        <motion.span animate={{ scaleX: [0, 1] }} transition={{ duration: 0.3 }}>
-                          ▸
-                        </motion.span>
-                        {link.label}
-                      </Link>
-                    )}
-                  </li>
-                ))}
+                <li>
+                  <Link to="/" className="text-gray-400 hover:text-amber-400 text-sm transition-colors flex items-center gap-2">
+                    <motion.span animate={{ scaleX: [0, 1] }} transition={{ duration: 0.3 }}>▸</motion.span>
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <a href="#services" className="text-gray-400 hover:text-amber-400 text-sm transition-colors flex items-center gap-2">
+                    <motion.span animate={{ scaleX: [0, 1] }} transition={{ duration: 0.3 }}>▸</motion.span>
+                    Services
+                  </a>
+                </li>
+                <li>
+                  <a href="#gallery" className="text-gray-400 hover:text-amber-400 text-sm transition-colors flex items-center gap-2">
+                    <motion.span animate={{ scaleX: [0, 1] }} transition={{ duration: 0.3 }}>▸</motion.span>
+                    Gallery
+                  </a>
+                </li>
+                <li>
+                  <Link to="/contact" className="text-gray-400 hover:text-amber-400 text-sm transition-colors flex items-center gap-2">
+                    <motion.span animate={{ scaleX: [0, 1] }} transition={{ duration: 0.3 }}>▸</motion.span>
+                    Contact
+                  </Link>
+                </li>
               </ul>
             </motion.div>
 
@@ -138,45 +196,34 @@ export default function Footer() {
             <motion.div variants={itemVariants} className="space-y-4">
               <h3 className="font-bold text-white text-sm uppercase tracking-widest">Contact</h3>
               <div className="space-y-3">
-                <a href="tel:+15551234567" className="flex gap-3 text-gray-400 hover:text-amber-400 transition-colors">
-                  <Phone size={16} className="flex-shrink-0 mt-0.5" />
-                  <span className="text-sm">+1 (555) 123-4567</span>
+                <a href="tel:0673848023" className="flex gap-3 text-gray-400 hover:text-amber-400 transition-colors">
+                  <span className="text-sm">0673-848023</span>
                 </a>
                 <a
-                  href="mailto:legends@academy.com"
+                  href="mailto:contact@legendsacademy.ma"
                   className="flex gap-3 text-gray-400 hover:text-amber-400 transition-colors"
                 >
-                  <Mail size={16} className="flex-shrink-0 mt-0.5" />
-                  <span className="text-sm">legends@academy.com</span>
+                  <span className="text-sm">contact@legendsacademy.ma</span>
                 </a>
                 <div className="flex gap-3 text-gray-400">
-                  <MapPin size={16} className="flex-shrink-0 mt-0.5" />
-                  <span className="text-sm">742 Evergreen Terrace, Springfield</span>
-                </div>
-                <div className="flex gap-3 text-gray-400">
-                  <Clock size={16} className="flex-shrink-0 mt-0.5" />
-                  <span className="text-sm">
-                    Mon-Thu: 5PM-12AM
-                    <br />
-                    Fri-Sun: 2PM-2AM
-                  </span>
+                  <span className="text-sm">Legends Academy, Maroc</span>
                 </div>
               </div>
             </motion.div>
 
-            {/* Features */}
+            {/* Legal Links */}
             <motion.div variants={itemVariants} className="space-y-4">
-              <h3 className="font-bold text-white text-sm uppercase tracking-widest">Why Choose Us</h3>
-              <div className="space-y-3">
-                {features.map((feature, i) => {
-                  const Icon = feature.icon
-                  return (
-                    <div key={i} className="flex gap-2 text-gray-400 text-sm">
-                      <Icon size={16} className="flex-shrink-0 text-amber-500 mt-0.5" />
-                      <span>{feature.label}</span>
-                    </div>
-                  )
-                })}
+              <h3 className="font-bold text-white text-sm uppercase tracking-widest">Legal</h3>
+              <div className="space-y-2">
+                <Link to="/privacy-policy" className="text-gray-400 hover:text-amber-400 text-sm transition-colors block">
+                  Privacy Policy
+                </Link>
+                <Link to="/terms-of-service" className="text-gray-400 hover:text-amber-400 text-sm transition-colors block">
+                  Terms of Service
+                </Link>
+                <Link to="/sitemap" className="text-gray-400 hover:text-amber-400 text-sm transition-colors block">
+                  Sitemap
+                </Link>
               </div>
             </motion.div>
           </motion.div>
@@ -189,28 +236,17 @@ export default function Footer() {
             className="h-px bg-gradient-to-r from-transparent via-amber-500/30 to-transparent my-12 origin-left"
           />
 
-          {/* Bottom Footer */}
+          {/* Bottom Footer - Desktop */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="flex flex-col md:flex-row justify-between items-center gap-4"
+            className="hidden md:flex justify-between items-center gap-4"
           >
             <motion.p variants={itemVariants} className="text-gray-500 text-sm">
               &copy; {currentYear} Legends Academy. All rights reserved.
             </motion.p>
-            <motion.div variants={itemVariants} className="flex gap-6 text-gray-500 text-sm">
-              <a href="#" className="hover:text-amber-400 transition-colors">
-                Privacy Policy
-              </a>
-              <a href="#" className="hover:text-amber-400 transition-colors">
-                Terms of Service
-              </a>
-              <a href="#" className="hover:text-amber-400 transition-colors">
-                Sitemap
-              </a>
-            </motion.div>
             <motion.p variants={itemVariants} className="text-amber-400 font-semibold text-sm">
               Excellence • Precision • Legacy
             </motion.p>
@@ -220,4 +256,3 @@ export default function Footer() {
     </footer>
   )
 }
-
