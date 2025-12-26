@@ -1,0 +1,34 @@
+{
+  "v": "5.7.14",
+  "meta": { "a": "Legends Academy", "d": "Contact Animation", "tc": "" },
+  "fr": 60,
+  "ip": 0,
+  "op": 300,
+  "w": 800,
+  "h": 600,
+  "nm": "Contact",
+  "ddd": 0,
+  "assets": [],
+  "layers": [
+    {
+      "ddd": 0,
+      "ind": 1,
+      "ty": 1,
+      "nm": "Background",
+      "sr": 1,
+      "ks": {
+        "o": { "a": 0, "k": 0 },
+        "r": 0,
+        "p": [400, 300],
+        "a": [400, 300],
+        "s": [100, 100]
+      },
+      "ao": 0,
+      "sw": 800,
+      "sh": 600,
+      "sc": "#D4AF37",
+      "t": 0
+    }
+  ],
+  "markers": []
+}
