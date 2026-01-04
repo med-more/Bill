@@ -1,10 +1,31 @@
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
+import { useState, useEffect } from "react"
 import { Check } from "lucide-react"
 import { Link } from "react-router-dom"
 
 export default function PricingSection() {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: false })
+  const [hasAnimated, setHasAnimated] = useState(false)
+  const [lastScrollY, setLastScrollY] = useState(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      const scrollDelta = currentScrollY - lastScrollY
+      
+      // Only animate when scrolling down and element is in view
+      // Once animated, keep it visible (don't reset on scroll up)
+      if (inView && scrollDelta > 0 && !hasAnimated) {
+        setHasAnimated(true)
+      }
+      
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [inView, lastScrollY, hasAnimated])
 
   const pricingCards = [
     {
@@ -74,7 +95,7 @@ export default function PricingSection() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          animate={hasAnimated && inView ? { opacity: 1, y: 0 } : hasAnimated ? { opacity: 1, y: 0 } : {}}
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Membership</h2>
@@ -84,7 +105,7 @@ export default function PricingSection() {
         <motion.div
           variants={containerVariants}
           initial="hidden"
-          animate={inView ? "visible" : "hidden"}
+          animate={hasAnimated && inView ? "visible" : hasAnimated ? "visible" : "hidden"}
           className="grid md:grid-cols-3 gap-8"
         >
           {pricingCards.map((card, i) => (

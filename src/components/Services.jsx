@@ -1,9 +1,30 @@
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
+import { useState, useEffect } from "react"
 import { SquareStack, Martini, Users } from "lucide-react"
 
 export default function ServicesSection() {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: false })
+  const [hasAnimated, setHasAnimated] = useState(false)
+  const [lastScrollY, setLastScrollY] = useState(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      const scrollDelta = currentScrollY - lastScrollY
+      
+      // Only animate when scrolling down and element is in view
+      // Once animated, keep it visible (don't reset on scroll up)
+      if (inView && scrollDelta > 0 && !hasAnimated) {
+        setHasAnimated(true)
+      }
+      
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [inView, lastScrollY, hasAnimated])
 
   const services = [
     {
@@ -50,7 +71,7 @@ export default function ServicesSection() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          animate={hasAnimated && inView ? { opacity: 1, y: 0 } : hasAnimated ? { opacity: 1, y: 0 } : {}}
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Our Services</h2>
@@ -60,7 +81,7 @@ export default function ServicesSection() {
         <motion.div
           variants={containerVariants}
           initial="hidden"
-          animate={inView ? "visible" : "hidden"}
+          animate={hasAnimated && inView ? "visible" : hasAnimated ? "visible" : "hidden"}
           className="grid md:grid-cols-3 gap-8"
         >
           {services.map((service, i) => {

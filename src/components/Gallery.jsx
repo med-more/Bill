@@ -1,11 +1,31 @@
 import { motion, AnimatePresence } from "framer-motion"
 import { useInView } from "react-intersection-observer"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { X } from "lucide-react"
 
 export default function GallerySection() {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: false })
   const [selectedImage, setSelectedImage] = useState(null)
+  const [hasAnimated, setHasAnimated] = useState(false)
+  const [lastScrollY, setLastScrollY] = useState(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      const scrollDelta = currentScrollY - lastScrollY
+      
+      // Only animate when scrolling down and element is in view
+      // Once animated, keep it visible (don't reset on scroll up)
+      if (inView && scrollDelta > 0 && !hasAnimated) {
+        setHasAnimated(true)
+      }
+      
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [inView, lastScrollY, hasAnimated])
 
   const galleryItems = [
     { id: 1, title: "Championship Tables", image: "/images/1.jpg" },
@@ -44,7 +64,7 @@ export default function GallerySection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          animate={hasAnimated && inView ? { opacity: 1, y: 0 } : hasAnimated ? { opacity: 1, y: 0 } : {}}
           className="text-center mb-16"
         >
           <h2 className="text-5xl md:text-6xl font-bold text-white mb-4">Gallery</h2>
@@ -55,7 +75,7 @@ export default function GallerySection() {
         <motion.div
           variants={containerVariants}
           initial="hidden"
-          animate={inView ? "visible" : "hidden"}
+          animate={hasAnimated && inView ? "visible" : hasAnimated ? "visible" : "hidden"}
           className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
         >
           {galleryItems.map((item) => (

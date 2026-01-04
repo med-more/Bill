@@ -8,7 +8,7 @@ export default function Header() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const navItems = ["Home", "Gallery", "Services", "Pricing", "Events"]
+  const navItems = ["Home", "Gallery", "Services", "Pricing", "Events", "Shop"]
 
   const handleWhatsAppReserve = () => {
     const whatsappNumber = "212673848023" // Format international pour WhatsApp
@@ -18,6 +18,13 @@ export default function Header() {
 
   const handleNavClick = (item) => {
     const sectionId = item.toLowerCase()
+    
+    // Handle Shop as a separate page
+    if (sectionId === "shop") {
+      navigate("/shop")
+      setIsOpen(false)
+      return
+    }
     
     // Si on est déjà sur la page d'accueil, scroll vers la section
     if (location.pathname === "/") {
@@ -29,6 +36,7 @@ export default function Header() {
       // Sinon, naviguer vers la page d'accueil puis scroll
       navigate("/", { state: { scrollTo: sectionId } })
     }
+    setIsOpen(false)
   }
 
   return (

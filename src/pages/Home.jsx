@@ -9,6 +9,7 @@ import GallerySection from "../components/Gallery"
 import EventsSection from "../components/Events"
 import PricingSection from "../components/Pricing"
 import Footer from "../components/Footer"
+import ScrollToTop from "../components/ScrollToTop"
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0)
@@ -76,6 +77,7 @@ export default function Home() {
         </div>
         <Footer />
       </div>
+      <ScrollToTop />
     </div>
   )
 }

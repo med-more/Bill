@@ -1,9 +1,30 @@
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
+import { useState, useEffect } from "react"
 import { Star, Users, Zap } from "lucide-react"
 
 export default function AboutSection() {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: false })
+  const [hasAnimated, setHasAnimated] = useState(false)
+  const [lastScrollY, setLastScrollY] = useState(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      const scrollDelta = currentScrollY - lastScrollY
+      
+      // Only animate when scrolling down and element is in view
+      // Once animated, keep it visible (don't reset on scroll up)
+      if (inView && scrollDelta > 0 && !hasAnimated) {
+        setHasAnimated(true)
+      }
+      
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [inView, lastScrollY, hasAnimated])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -30,7 +51,7 @@ export default function AboutSection() {
         <motion.div
           variants={containerVariants}
           initial="hidden"
-          animate={inView ? "visible" : "hidden"}
+          animate={hasAnimated && inView ? "visible" : hasAnimated ? "visible" : "hidden"}
           className="grid md:grid-cols-2 gap-12 items-center"
         >
           {/* Left side - Image */}

@@ -1,9 +1,30 @@
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
+import { useState, useEffect } from "react"
 import { MapPin, Users, Trophy, Clock } from "lucide-react"
 
 export default function VenueShowcase() {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: false })
+  const [hasAnimated, setHasAnimated] = useState(false)
+  const [lastScrollY, setLastScrollY] = useState(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      const scrollDelta = currentScrollY - lastScrollY
+      
+      // Only animate when scrolling down and element is in view
+      // Once animated, keep it visible (don't reset on scroll up)
+      if (inView && scrollDelta > 0 && !hasAnimated) {
+        setHasAnimated(true)
+      }
+      
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [inView, lastScrollY, hasAnimated])
 
   const features = [
     {
@@ -34,7 +55,7 @@ export default function VenueShowcase() {
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          animate={hasAnimated && inView ? { opacity: 1, y: 0 } : hasAnimated ? { opacity: 1, y: 0 } : {}}
           className="text-center mb-16"
         >
           <h2 className="text-5xl md:text-6xl font-bold text-white mb-4">Discover Legends Academy</h2>
@@ -49,7 +70,7 @@ export default function VenueShowcase() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
+            animate={hasAnimated && inView ? { opacity: 1, x: 0 } : hasAnimated ? { opacity: 1, x: 0 } : {}}
             transition={{ delay: 0 }}
             className="rounded-2xl overflow-hidden aspect-video relative group"
           >
@@ -62,7 +83,7 @@ export default function VenueShowcase() {
             <motion.div
               className="absolute bottom-6 left-6"
               initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
+              animate={hasAnimated && inView ? { opacity: 1, y: 0 } : hasAnimated ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.1 }}
             >
               <h3 className="text-2xl font-bold text-white">Main Hall</h3>
@@ -72,7 +93,7 @@ export default function VenueShowcase() {
 
           <motion.div
             initial={{ opacity: 0, x: 30 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
+            animate={hasAnimated && inView ? { opacity: 1, x: 0 } : hasAnimated ? { opacity: 1, x: 0 } : {}}
             transition={{ delay: 0.05 }}
             className="rounded-2xl overflow-hidden aspect-video relative group"
           >
@@ -85,7 +106,7 @@ export default function VenueShowcase() {
             <motion.div
               className="absolute bottom-6 left-6"
               initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
+              animate={hasAnimated && inView ? { opacity: 1, y: 0 } : hasAnimated ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.15 }}
             >
               <h3 className="text-2xl font-bold text-white">VIP Lounge</h3>
@@ -97,7 +118,7 @@ export default function VenueShowcase() {
         {/* Features Grid */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          animate={hasAnimated && inView ? { opacity: 1, y: 0 } : hasAnimated ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.3 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
         >
@@ -121,7 +142,7 @@ export default function VenueShowcase() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            animate={hasAnimated && inView ? { opacity: 1, scale: 1 } : hasAnimated ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.15 }}
             className="rounded-xl overflow-hidden aspect-square relative group"
           >
@@ -137,7 +158,7 @@ export default function VenueShowcase() {
 
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            animate={hasAnimated && inView ? { opacity: 1, scale: 1 } : hasAnimated ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.2 }}
             className="rounded-xl overflow-hidden aspect-square relative group"
           >
@@ -153,7 +174,7 @@ export default function VenueShowcase() {
 
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            animate={hasAnimated && inView ? { opacity: 1, scale: 1 } : hasAnimated ? { opacity: 1, scale: 1 } : {}}
             transition={{ delay: 0.25 }}
             className="rounded-xl overflow-hidden aspect-square relative group"
           >
