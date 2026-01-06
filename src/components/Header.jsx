@@ -1,12 +1,25 @@
 import { motion } from "framer-motion"
-import { Menu, X } from "lucide-react"
+import { Menu, X, ShoppingCart } from "lucide-react"
 import { useState } from "react"
 import { Link, useNavigate, useLocation } from "react-router-dom"
+import { useCart } from "../context/CartContext"
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
+  const { getCartItemCount, setShowCartSidebar } = useCart()
+  const cartItemCount = getCartItemCount()
+
+  const handleCartClick = () => {
+    if (location.pathname === "/shop") {
+      // Si on est déjà sur la page Shop, ouvrir le sidebar
+      setShowCartSidebar(true)
+    } else {
+      // Sinon, naviguer vers la page Shop
+      navigate("/shop")
+    }
+  }
 
   const navItems = ["Home", "Gallery", "Services", "Pricing", "Events", "Shop"]
 
@@ -80,20 +93,46 @@ export default function Header() {
           </motion.div>
         </nav>
 
-        {/* Mobile menu button */}
-        <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-amber-400">
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Right side: Cart Icon, CTA Button, Mobile menu */}
+        <div className="flex items-center gap-4">
+          {/* Cart Icon - visible on all screens */}
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="relative"
+          >
+            <button
+              onClick={handleCartClick}
+              className="relative flex items-center justify-center text-amber-400 hover:text-amber-300 transition-colors cursor-pointer bg-transparent border-none"
+            >
+              <ShoppingCart className="w-5 h-5 md:w-6 md:h-6" />
+              {cartItemCount > 0 && (
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-lg"
+                >
+                  {cartItemCount > 9 ? "9+" : cartItemCount}
+                </motion.span>
+              )}
+            </button>
+          </motion.div>
 
-        {/* CTA Button */}
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleWhatsAppReserve}
-          className="hidden md:block px-4 py-2 text-xs font-bold uppercase border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-slate-900 transition-all duration-300 rounded"
-        >
-          Reserve
-        </motion.button>
+          {/* CTA Button - Desktop only */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleWhatsAppReserve}
+            className="hidden md:block px-4 py-2 text-xs font-bold uppercase border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-slate-900 transition-all duration-300 rounded"
+          >
+            Reserve
+          </motion.button>
+
+          {/* Mobile menu button */}
+          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-amber-400">
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
