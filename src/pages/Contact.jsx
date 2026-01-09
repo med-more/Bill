@@ -1,11 +1,13 @@
 import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
-import { Phone, Mail, MapPin, Clock, MessageCircle, Instagram, Facebook, Send, CheckCircle } from "lucide-react"
+import { Phone, Mail, MapPin, Clock, MessageCircle, Instagram, Facebook, Send, CheckCircle, ArrowLeft } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import ScrollToTop from "../components/ScrollToTop"
 
 export default function ContactPage() {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -131,10 +133,25 @@ export default function ContactPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 }}
+                className="flex justify-start mb-6"
+              >
+                <button
+                  onClick={() => navigate(-1)}
+                  className="flex items-center gap-2 text-amber-400 hover:text-amber-300 transition-colors group"
+                >
+                  <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                  <span className="text-sm font-medium">Retour</span>
+                </button>
+              </motion.div>
+              
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
+                transition={{ delay: 0.2 }}
                 className="text-amber-400 font-semibold mb-4 uppercase tracking-widest text-sm"
               >
                 Contactez-nous
@@ -143,7 +160,7 @@ export default function ContactPage() {
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
+                transition={{ delay: 0.3 }}
                 className="text-5xl md:text-7xl font-bold mb-6 text-white"
               >
                 Parlons de votre <span className="text-amber-500">Projet</span>
@@ -152,14 +169,14 @@ export default function ContactPage() {
               <motion.div
                 initial={{ opacity: 0, width: 0 }}
                 animate={{ opacity: 1, width: "100%" }}
-                transition={{ delay: 0.3, duration: 0.8 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
                 className="h-1 bg-amber-500 mb-6 max-w-md mx-auto"
               />
               
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
+                transition={{ delay: 0.5 }}
                 className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed"
               >
                 Notre équipe est prête à répondre à toutes vos questions et à vous aider à réserver votre expérience inoubliable.

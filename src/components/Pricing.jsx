@@ -31,7 +31,7 @@ export default function PricingSection() {
     {
       name: "Casual Play",
       slug: "casual",
-      price: "$15",
+      price: "150",
       period: "/hour",
       description: "Perfect for casual games",
       features: ["Standard pool table", "Cue and ball rental", "Coffee and soft drinks", "Weekday discounts"],
@@ -40,7 +40,7 @@ export default function PricingSection() {
     {
       name: "Premium Member",
       slug: "premium",
-      price: "$30",
+      price: "300",
       period: "/hour",
       description: "The ultimate experience",
       features: [
@@ -127,7 +127,7 @@ export default function PricingSection() {
               <h3 className="text-2xl font-bold text-white mb-2">{card.name}</h3>
               <p className="text-gray-400 text-xs mb-4 uppercase tracking-widest">{card.description}</p>
               <div className="mb-6">
-                <span className="text-4xl font-bold text-amber-500">{card.price}</span>
+                <span className="text-4xl font-bold text-amber-500">{card.price} {card.price !== "Custom" && "DH"}</span>
                 <span className="text-gray-400 ml-2 text-sm">{card.period}</span>
               </div>
               {card.highlighted ? (

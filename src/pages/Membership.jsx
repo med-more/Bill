@@ -16,7 +16,7 @@ export default function Membership() {
   const packs = {
     casual: {
       name: "Casual Play",
-      price: "$15",
+      price: "150",
       period: "/hour",
       description: "Perfect for casual games and relaxed sessions",
       icon: Users,
@@ -44,7 +44,7 @@ export default function Membership() {
     },
     premium: {
       name: "Premium Member",
-      price: "$30",
+      price: "300",
       period: "/hour",
       description: "The ultimate experience for serious players",
       icon: Crown,
@@ -217,7 +217,7 @@ export default function Membership() {
                 transition={{ delay: 0.6 }}
                 className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-black/80 to-black/60 border-2 border-amber-500/30 backdrop-blur-sm"
               >
-                <span className="text-6xl font-bold text-amber-400">{currentPack.price}</span>
+                <span className="text-6xl font-bold text-amber-400">{currentPack.price} DH</span>
                 <span className="text-gray-400 text-xl">{currentPack.period}</span>
               </motion.div>
             </motion.div>

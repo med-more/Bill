@@ -1,15 +1,18 @@
 import { motion } from "framer-motion"
-import { Menu, X, ShoppingCart } from "lucide-react"
+import { Menu, X, ShoppingCart, Heart } from "lucide-react"
 import { useState } from "react"
 import { Link, useNavigate, useLocation } from "react-router-dom"
 import { useCart } from "../context/CartContext"
+import { useFavorites } from "../context/FavoritesContext"
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const { getCartItemCount, setShowCartSidebar } = useCart()
+  const { getFavoritesCount } = useFavorites()
   const cartItemCount = getCartItemCount()
+  const favoritesCount = getFavoritesCount()
 
   const handleCartClick = () => {
     if (location.pathname === "/shop") {
@@ -93,8 +96,31 @@ export default function Header() {
           </motion.div>
         </nav>
 
-        {/* Right side: Cart Icon, CTA Button, Mobile menu */}
+        {/* Right side: Favorites, Cart Icon, CTA Button, Mobile menu */}
         <div className="flex items-center gap-4">
+          {/* Favorites Icon - visible on all screens */}
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="relative"
+          >
+            <Link
+              to="/favorites"
+              className="relative flex items-center justify-center text-red-400 hover:text-red-300 transition-colors"
+            >
+              <Heart className="w-5 h-5 md:w-6 md:h-6" />
+              {favoritesCount > 0 && (
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-lg"
+                >
+                  {favoritesCount > 9 ? "9+" : favoritesCount}
+                </motion.span>
+              )}
+            </Link>
+          </motion.div>
+
           {/* Cart Icon - visible on all screens */}
           <motion.div
             whileHover={{ scale: 1.1 }}
@@ -155,6 +181,19 @@ export default function Header() {
                 {item}
               </button>
             ))}
+            <Link
+              to="/favorites"
+              className="flex items-center gap-2 text-red-400 text-sm font-medium uppercase hover:text-red-300"
+              onClick={() => setIsOpen(false)}
+            >
+              <Heart className="w-4 h-4" />
+              Favoris
+              {favoritesCount > 0 && (
+                <span className="ml-auto bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {favoritesCount > 9 ? "9+" : favoritesCount}
+                </span>
+              )}
+            </Link>
             <Link
               to="/contact"
               className="text-amber-400 text-sm font-medium uppercase hover:text-amber-300"

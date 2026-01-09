@@ -1,19 +1,23 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, ShoppingCart, Star, Filter, X, Heart, Minus, Plus, Trash2, SlidersHorizontal, ChevronDown, ChevronLeft, ChevronRight, SortAsc, SortDesc } from "lucide-react"
+import { Search, ShoppingCart, Star, Filter, X, Heart, Minus, Plus, Trash2, SlidersHorizontal, ChevronDown, ChevronLeft, ChevronRight, SortAsc, SortDesc, ArrowLeft } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import ScrollToTop from "../components/ScrollToTop"
 import { useCart } from "../context/CartContext"
+import { useFavorites } from "../context/FavoritesContext"
+import { productsData as sharedProductsData, categories as sharedCategories } from "../data/productsData"
 
 export default function Shop() {
+  const navigate = useNavigate()
   const [products, setProducts] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [showFilters, setShowFilters] = useState(false)
   const { cart, addToCart: addToCartContext, removeFromCart: removeFromCartContext, updateCartQuantity: updateCartQuantityContext, getCartTotal, getCartItemCount, showCartSidebar, setShowCartSidebar } = useCart()
-  const [favorites, setFavorites] = useState([])
+  const { favorites, toggleFavorite, isFavorite } = useFavorites()
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [sortBy, setSortBy] = useState("featured")
   const [priceRange, setPriceRange] = useState([0, 1000])
@@ -22,312 +26,16 @@ export default function Shop() {
   const [currentPage, setCurrentPage] = useState(1)
   const productsPerPage = 10
 
-  // Sample products data
-  const productsData = [
-    {
-      id: 1,
-      name: "Professional Pool Cue",
-      category: "equipment",
-      price: 299,
-      originalPrice: 349,
-      image: "/images/1.jpg",
-      rating: 4.8,
-      reviews: 124,
-      description: "Premium carbon fiber cue with leather grip",
-      inStock: true,
-      featured: true,
-    },
-    {
-      id: 2,
-      name: "Championship Billiard Balls Set",
-      category: "equipment",
-      price: 89,
-      image: "/images/2.jpg",
-      rating: 4.9,
-      reviews: 89,
-      description: "Tournament-grade phenolic resin balls",
-      inStock: true,
-      featured: false,
-    },
-    {
-      id: 3,
-      name: "Premium Cue Case",
-      category: "accessories",
-      price: 149,
-      originalPrice: 179,
-      image: "/images/3.jpg",
-      rating: 4.7,
-      reviews: 56,
-      description: "Hard-shell protective case with velvet interior",
-      inStock: true,
-      featured: false,
-    },
-    {
-      id: 4,
-      name: "Luxury Table Cloth",
-      category: "accessories",
-      price: 199,
-      image: "/images/4.jpg",
-      rating: 4.6,
-      reviews: 42,
-      description: "Professional-grade felt in multiple colors",
-      inStock: true,
-      featured: true,
-    },
-    {
-      id: 5,
-      name: "Legends Academy T-Shirt",
-      category: "merchandise",
-      price: 39,
-      image: "/images/5.jpg",
-      rating: 4.5,
-      reviews: 78,
-      description: "Premium cotton with embroidered logo",
-      inStock: true,
-      featured: false,
-    },
-    {
-      id: 6,
-      name: "Premium Chalk Set",
-      category: "accessories",
-      price: 24,
-      image: "/images/6.jpg",
-      rating: 4.8,
-      reviews: 156,
-      description: "12-pack of professional billiard chalk",
-      inStock: true,
-      featured: false,
-    },
-    {
-      id: 7,
-      name: "Tournament Rack",
-      category: "equipment",
-      price: 45,
-      image: "/images/1.jpg",
-      rating: 4.7,
-      reviews: 91,
-      description: "Durable wooden rack with precision angles",
-      inStock: true,
-      featured: false,
-    },
-    {
-      id: 8,
-      name: "Legends Academy Hoodie",
-      category: "merchandise",
-      price: 69,
-      originalPrice: 89,
-      image: "/images/2.jpg",
-      rating: 4.9,
-      reviews: 112,
-      description: "Premium fleece hoodie with zip-up design",
-      inStock: true,
-      featured: true,
-    },
-    {
-      id: 9,
-      name: "Cue Tip Shaper",
-      category: "accessories",
-      price: 19,
-      image: "/images/3.jpg",
-      rating: 4.4,
-      reviews: 67,
-      description: "Professional tip maintenance tool",
-      inStock: true,
-      featured: false,
-    },
-    {
-      id: 10,
-      name: "Elite Pool Cue Set",
-      category: "equipment",
-      price: 449,
-      originalPrice: 549,
-      image: "/images/4.jpg",
-      rating: 5.0,
-      reviews: 203,
-      description: "Professional tournament-grade cue set with case",
-      inStock: true,
-      featured: true,
-    },
-    {
-      id: 11,
-      name: "Billiard Gloves Pack",
-      category: "accessories",
-      price: 34,
-      image: "/images/5.jpg",
-      rating: 4.6,
-      reviews: 145,
-      description: "Set of 3 professional billiard gloves",
-      inStock: true,
-      featured: false,
-    },
-    {
-      id: 12,
-      name: "Legends Academy Cap",
-      category: "merchandise",
-      price: 29,
-      originalPrice: 39,
-      image: "/images/6.jpg",
-      rating: 4.7,
-      reviews: 98,
-      description: "Premium snapback cap with embroidered logo",
-      inStock: true,
-      featured: false,
-    },
-    {
-      id: 13,
-      name: "Pool Table Brush",
-      category: "accessories",
-      price: 27,
-      image: "/images/1.jpg",
-      rating: 4.5,
-      reviews: 76,
-      description: "Professional table maintenance brush",
-      inStock: true,
-      featured: false,
-    },
-    {
-      id: 14,
-      name: "Championship Cue Stand",
-      category: "equipment",
-      price: 79,
-      image: "/images/2.jpg",
-      rating: 4.8,
-      reviews: 134,
-      description: "Elegant wooden cue stand for 4 cues",
-      inStock: true,
-      featured: true,
-    },
-    {
-      id: 15,
-      name: "Legends Academy Polo Shirt",
-      category: "merchandise",
-      price: 49,
-      originalPrice: 59,
-      image: "/images/3.jpg",
-      rating: 4.6,
-      reviews: 87,
-      description: "Premium polo shirt with embroidered logo",
-      inStock: true,
-      featured: false,
-    },
-    {
-      id: 16,
-      name: "Billiard Ball Cleaner",
-      category: "accessories",
-      price: 15,
-      image: "/images/4.jpg",
-      rating: 4.3,
-      reviews: 92,
-      description: "Professional cleaning solution for billiard balls",
-      inStock: true,
-      featured: false,
-    },
-    {
-      id: 17,
-      name: "Pro Cue Extension",
-      category: "equipment",
-      price: 89,
-      image: "/images/5.jpg",
-      rating: 4.7,
-      reviews: 56,
-      description: "Adjustable cue extension for reach shots",
-      inStock: false,
-      featured: false,
-    },
-    {
-      id: 18,
-      name: "Legends Academy Jacket",
-      category: "merchandise",
-      price: 99,
-      originalPrice: 129,
-      image: "/images/6.jpg",
-      rating: 4.9,
-      reviews: 167,
-      description: "Premium windbreaker jacket with logo",
-      inStock: true,
-      featured: true,
-    },
-    {
-      id: 19,
-      name: "Billiard Triangle Rack",
-      category: "equipment",
-      price: 22,
-      image: "/images/1.jpg",
-      rating: 4.4,
-      reviews: 201,
-      description: "Durable plastic triangle rack",
-      inStock: true,
-      featured: false,
-    },
-    {
-      id: 20,
-      name: "Cue Tip Repair Kit",
-      category: "accessories",
-      price: 39,
-      image: "/images/2.jpg",
-      rating: 4.6,
-      reviews: 78,
-      description: "Complete kit for cue tip maintenance",
-      inStock: true,
-      featured: false,
-    },
-    {
-      id: 21,
-      name: "Legends Academy Backpack",
-      category: "merchandise",
-      price: 79,
-      originalPrice: 99,
-      image: "/images/3.jpg",
-      rating: 4.8,
-      reviews: 143,
-      description: "Premium backpack with cue compartment",
-      inStock: true,
-      featured: true,
-    },
-    {
-      id: 22,
-      name: "Pool Table Cover",
-      category: "accessories",
-      price: 129,
-      image: "/images/4.jpg",
-      rating: 4.7,
-      reviews: 65,
-      description: "Waterproof table protection cover",
-      inStock: true,
-      featured: false,
-    },
-    {
-      id: 23,
-      name: "Professional Cue Tip",
-      category: "accessories",
-      price: 12,
-      image: "/images/5.jpg",
-      rating: 4.5,
-      reviews: 234,
-      description: "High-quality leather cue tip replacement",
-      inStock: true,
-      featured: false,
-    },
-    {
-      id: 24,
-      name: "Legends Academy Mug",
-      category: "merchandise",
-      price: 19,
-      image: "/images/6.jpg",
-      rating: 4.6,
-      reviews: 112,
-      description: "Ceramic mug with Legends Academy logo",
-      inStock: true,
-      featured: false,
-    },
-  ]
+  // Use shared products data
+  const productsData = sharedProductsData
 
-  const categories = [
-    { id: "all", name: "All Products", count: productsData.length },
-    { id: "equipment", name: "Equipment", count: productsData.filter(p => p.category === "equipment").length },
-    { id: "accessories", name: "Accessories", count: productsData.filter(p => p.category === "accessories").length },
-    { id: "merchandise", name: "Merchandise", count: productsData.filter(p => p.category === "merchandise").length },
-  ]
+  // Use shared categories
+  const categories = sharedCategories.map(cat => ({
+    ...cat,
+    count: cat.id === "all" 
+      ? productsData.length 
+      : productsData.filter(p => p.category === cat.id).length
+  }))
 
   useEffect(() => {
     setProducts(productsData)
@@ -435,18 +143,19 @@ export default function Shop() {
     updateCartQuantityContext(productId, quantity)
   }
 
-  const toggleFavorite = (productId) => {
+  const handleToggleFavorite = (productId) => {
+    console.log("🛒 Shop - handleToggleFavorite called with productId:", productId, "Type:", typeof productId)
     const product = products.find(p => p.id === productId)
-    setFavorites(prev => {
-      const isFavorite = prev.includes(productId)
-      if (isFavorite) {
-        showNotification(`${product?.name} retiré des favoris`)
-        return prev.filter(id => id !== productId)
-      } else {
-        showNotification(`${product?.name} ajouté aux favoris`)
-        return [...prev, productId]
-      }
-    })
+    console.log("🛒 Shop - Found product:", product ? { id: product.id, name: product.name } : "NOT FOUND")
+    const wasFavorite = isFavorite(productId)
+    console.log("🛒 Shop - Was favorite?", wasFavorite)
+    console.log("🛒 Shop - Calling toggleFavorite with:", productId)
+    toggleFavorite(productId)
+    if (wasFavorite) {
+      showNotification(`${product?.name} retiré des favoris`)
+    } else {
+      showNotification(`${product?.name} ajouté aux favoris`)
+    }
   }
 
   const containerVariants = {
@@ -547,7 +256,7 @@ export default function Shop() {
                           />
                           <div className="flex-1">
                             <h3 className="font-bold text-white mb-1">{item.name}</h3>
-                            <p className="text-amber-500 font-bold mb-2">${item.price}</p>
+                            <p className="text-amber-500 font-bold mb-2">{item.price} DH</p>
                             <div className="flex items-center gap-2">
                               <button
                                 onClick={() => updateCartQuantity(item.id, item.quantity - 1)}
@@ -582,7 +291,7 @@ export default function Shop() {
                   <div className="flex justify-between items-center">
                     <span className="text-gray-400">Total:</span>
                     <span className="text-2xl font-bold text-amber-500">
-                      ${getCartTotal().toFixed(2)}
+                      {getCartTotal().toFixed(2)} DH
                     </span>
                   </div>
                   <button
@@ -611,6 +320,13 @@ export default function Shop() {
             transition={{ duration: 0.6 }}
             className="mb-8"
           >
+            <button
+              onClick={() => navigate(-1)}
+              className="flex items-center gap-2 text-amber-400 hover:text-amber-300 transition-colors mb-4 group"
+            >
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              <span className="text-sm font-medium">Retour</span>
+            </button>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
               Shop
             </h1>
@@ -625,9 +341,23 @@ export default function Shop() {
       {/* Main Shop Layout with Sidebar */}
       <section className="relative py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Mobile Filter Button */}
+          <div className="lg:hidden mb-4 flex items-center justify-between gap-4">
+            <button
+              onClick={() => setShowFilters(true)}
+              className="flex items-center gap-2 px-4 py-2.5 bg-slate-900/50 border border-amber-600/20 rounded-lg text-white hover:bg-slate-800/50 transition-colors"
+            >
+              <Filter className="w-4 h-4" />
+              <span className="font-semibold">Filtres</span>
+            </button>
+            <div className="text-xs text-gray-400">
+              {filteredProducts.length} résultat{filteredProducts.length > 1 ? 's' : ''}
+            </div>
+          </div>
+
           <div className="flex flex-col lg:flex-row gap-6">
-            {/* Left Sidebar - Filters */}
-            <aside className="lg:w-80 flex-shrink-0">
+            {/* Left Sidebar - Filters - Desktop Only */}
+            <aside className="hidden lg:block lg:w-80 flex-shrink-0">
               <div className="bg-slate-900/50 border border-amber-600/20 rounded-lg p-6 space-y-6 sticky top-24">
                 <h2 className="text-xl font-bold text-white mb-4">Filtres</h2>
                 
@@ -672,8 +402,8 @@ export default function Shop() {
                   <label className="block text-sm font-semibold text-white mb-3">Prix</label>
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs text-gray-400 mb-2">
-                      <span>${priceRange[0]}</span>
-                      <span>${priceRange[1]}</span>
+                      <span>{priceRange[0]} DH</span>
+                      <span>{priceRange[1]} DH</span>
                     </div>
                     <input
                       type="range"
@@ -772,16 +502,16 @@ export default function Shop() {
             {/* Right Side - Products */}
             <div className="flex-1">
               {/* Top Bar with Results and Sort */}
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-                <div className="text-sm text-gray-400">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 lg:mb-6">
+                <div className="text-xs sm:text-sm text-gray-400 hidden sm:block">
                   Affichage de {startIndex + 1}-{Math.min(endIndex, filteredProducts.length)} sur {filteredProducts.length} résultats
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-sm text-gray-400">Trier par:</span>
+                <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                  <span className="text-xs sm:text-sm text-gray-400">Trier:</span>
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="px-4 py-2 bg-slate-800/50 border border-amber-600/20 rounded text-white focus:outline-none focus:border-amber-500 transition-colors appearance-none cursor-pointer text-sm"
+                    className="flex-1 sm:flex-initial px-3 sm:px-4 py-2 bg-slate-800/50 border border-amber-600/20 rounded text-white focus:outline-none focus:border-amber-500 transition-colors appearance-none cursor-pointer text-xs sm:text-sm"
                   >
                     <option value="featured">Par défaut</option>
                     <option value="price-asc">Prix: Croissant</option>
@@ -812,7 +542,7 @@ export default function Shop() {
                 </div>
               ) : (
                 <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-6">
               {paginatedProducts.map((product) => (
                 <div
                   key={product.id}
@@ -820,20 +550,23 @@ export default function Shop() {
                 >
                   {/* Discount Badge */}
                   {product.originalPrice && (
-                    <div className="absolute top-3 left-3 z-10 bg-amber-500 text-slate-950 px-2 py-1 rounded text-xs font-bold">
+                    <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 bg-amber-500 text-slate-950 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-[10px] sm:text-xs font-bold">
                       {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% off
                     </div>
                   )}
 
                   {/* Action Icons - Top Right */}
-                  <div className="absolute top-3 right-3 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 flex flex-row sm:flex-col gap-1.5 sm:gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                     <button
-                      onClick={() => toggleFavorite(product.id)}
-                      className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center hover:bg-white transition-colors"
+                      onClick={() => {
+                        console.log("🖱️ Button clicked - Product:", { id: product.id, name: product.name })
+                        handleToggleFavorite(product.id)
+                      }}
+                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center hover:bg-white transition-colors"
                     >
                       <Heart
-                        className={`w-4 h-4 ${
-                          favorites.includes(product.id)
+                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${
+                          isFavorite(product.id)
                             ? "text-red-500 fill-red-500"
                             : "text-gray-700"
                         }`}
@@ -841,9 +574,9 @@ export default function Shop() {
                     </button>
                     <button
                       onClick={() => setSelectedProduct(product)}
-                      className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center hover:bg-white transition-colors"
+                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center hover:bg-white transition-colors"
                     >
-                      <Search className="w-4 h-4 text-gray-700" />
+                      <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-700" />
                     </button>
                   </div>
 
@@ -857,33 +590,33 @@ export default function Shop() {
                   </div>
 
                   {/* Product Info */}
-                  <div className="p-4 space-y-2">
+                  <div className="p-2 sm:p-3 lg:p-4 space-y-1 sm:space-y-2">
                     {/* Category */}
-                    <div className="text-xs text-amber-400 font-medium uppercase">
+                    <div className="text-[9px] sm:text-xs text-amber-400 font-medium uppercase line-clamp-1">
                       {categories.find(c => c.id === product.category)?.name || product.category}
                     </div>
 
                     {/* Product Name */}
-                    <h3 className="text-base font-semibold text-white line-clamp-2 min-h-[2.5rem]">
+                    <h3 className="text-xs sm:text-base font-semibold text-white line-clamp-2 min-h-[2rem] sm:min-h-[2.5rem] leading-tight">
                       {product.name}
                     </h3>
 
                     {/* Rating */}
-                    <div className="flex items-center gap-1">
-                      <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                      <span className="text-xs text-gray-400">
+                    <div className="flex items-center gap-0.5 sm:gap-1">
+                      <Star className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-amber-500 fill-amber-500" />
+                      <span className="text-[9px] sm:text-xs text-gray-400">
                         {product.rating}
                       </span>
                     </div>
 
                     {/* Price */}
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg font-bold text-amber-500">
-                        ${product.price}
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-2">
+                      <span className="text-sm sm:text-lg font-bold text-amber-500">
+                        {product.price} DH
                       </span>
                       {product.originalPrice && (
-                        <span className="text-sm text-gray-500 line-through">
-                          ${product.originalPrice}
+                        <span className="text-[10px] sm:text-sm text-gray-500 line-through">
+                          {product.originalPrice} DH
                         </span>
                       )}
                     </div>
@@ -892,9 +625,9 @@ export default function Shop() {
                     <button
                       onClick={() => addToCart(product)}
                       disabled={!product.inStock}
-                      className="w-full py-2 bg-amber-500 text-slate-950 font-semibold rounded hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
+                      className="w-full py-1 sm:py-2 bg-amber-500 text-slate-950 font-semibold rounded hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-[10px] sm:text-sm"
                     >
-                      Ajouter au panier
+                      Ajouter
                     </button>
                   </div>
                 </div>
@@ -988,6 +721,197 @@ export default function Shop() {
         </div>
       </section>
 
+      {/* Mobile Filters Drawer */}
+      <AnimatePresence>
+        {showFilters && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowFilters(false)}
+              className="fixed inset-0 bg-black/80 z-40 lg:hidden"
+            />
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="fixed top-0 left-0 h-full w-full max-w-sm bg-slate-900 border-r border-amber-600/30 z-50 flex flex-col shadow-2xl lg:hidden"
+            >
+              <div className="p-4 border-b border-amber-600/30 flex items-center justify-between">
+                <h2 className="text-xl font-bold text-white">Filtres</h2>
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="w-10 h-10 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-all"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-4 space-y-5">
+                {/* Search */}
+                <div>
+                  <label className="block text-sm font-semibold text-white mb-2">Rechercher</label>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <input
+                      type="text"
+                      placeholder="Rechercher..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2 bg-slate-800/50 border border-amber-600/20 rounded text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 transition-colors text-sm"
+                    />
+                  </div>
+                </div>
+
+                {/* Categories */}
+                <div>
+                  <label className="block text-sm font-semibold text-white mb-3">Par Catégories</label>
+                  <div className="space-y-2">
+                    {categories.map((category) => (
+                      <label key={category.id} className="flex items-center gap-2 cursor-pointer group">
+                        <input
+                          type="radio"
+                          name="category-mobile"
+                          checked={selectedCategory === category.id}
+                          onChange={() => setSelectedCategory(category.id)}
+                          className="w-4 h-4 text-amber-500 bg-slate-800 border-amber-600/30 focus:ring-amber-500 focus:ring-2"
+                        />
+                        <span className="text-sm text-gray-300 group-hover:text-white transition-colors">
+                          {category.name} ({category.count})
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Price Range */}
+                <div>
+                  <label className="block text-sm font-semibold text-white mb-3">Prix</label>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-xs text-gray-400 mb-2">
+                      <span>{priceRange[0]} DH</span>
+                      <span>{priceRange[1]} DH</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="1000"
+                      value={priceRange[1]}
+                      onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
+                      className="w-full h-2 bg-slate-800 rounded-full appearance-none cursor-pointer accent-amber-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Rating */}
+                <div>
+                  <label className="block text-sm font-semibold text-white mb-3">Note</label>
+                  <div className="space-y-2">
+                    {[5, 4, 3, 2, 1].map((rating) => (
+                      <label key={rating} className="flex items-center gap-2 cursor-pointer group">
+                        <input
+                          type="radio"
+                          name="rating-mobile"
+                          checked={minRating === rating}
+                          onChange={() => setMinRating(rating)}
+                          className="w-4 h-4 text-amber-500 bg-slate-800 border-amber-600/30 focus:ring-amber-500 focus:ring-2"
+                        />
+                        <div className="flex items-center gap-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-3 h-3 ${
+                                i < rating
+                                  ? "text-amber-500 fill-amber-500"
+                                  : "text-gray-600"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-xs text-gray-400 group-hover:text-white transition-colors">
+                          {rating} Star{rating > 1 ? "s" : ""}
+                        </span>
+                      </label>
+                    ))}
+                    <label className="flex items-center gap-2 cursor-pointer group">
+                      <input
+                        type="radio"
+                        name="rating-mobile"
+                        checked={minRating === 0}
+                        onChange={() => setMinRating(0)}
+                        className="w-4 h-4 text-amber-500 bg-slate-800 border-amber-600/30 focus:ring-amber-500 focus:ring-2"
+                      />
+                      <span className="text-xs text-gray-400 group-hover:text-white transition-colors">
+                        Toutes
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Featured Products */}
+                <div>
+                  <label className="block text-sm font-semibold text-white mb-3">Promotions</label>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        checked={sortBy === "featured"}
+                        onChange={(e) => e.target.checked && setSortBy("featured")}
+                        className="w-4 h-4 text-amber-500 bg-slate-800 border-amber-600/30 focus:ring-amber-500 focus:ring-2 rounded"
+                      />
+                      <span className="text-sm text-gray-300 group-hover:text-white transition-colors">
+                        En vedette
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Stock Availability */}
+                <div>
+                  <label className="block text-sm font-semibold text-white mb-3">Disponibilité</label>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        checked={true}
+                        readOnly
+                        className="w-4 h-4 text-amber-500 bg-slate-800 border-amber-600/30 focus:ring-amber-500 focus:ring-2 rounded"
+                      />
+                      <span className="text-sm text-gray-300 group-hover:text-white transition-colors">
+                        En stock
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 border-t border-amber-600/30 space-y-3">
+                <button
+                  onClick={() => {
+                    setSearchQuery("")
+                    setSelectedCategory("all")
+                    setPriceRange([0, 1000])
+                    setMinRating(0)
+                    setSortBy("featured")
+                  }}
+                  className="w-full py-2.5 bg-slate-800/50 border border-amber-600/20 text-white font-semibold rounded hover:bg-slate-700 transition-colors text-sm"
+                >
+                  Réinitialiser
+                </button>
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="w-full py-2.5 bg-amber-500 text-slate-950 font-semibold rounded hover:bg-amber-400 transition-colors text-sm"
+                >
+                  Appliquer les filtres
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
       {/* Simple Product Detail Modal */}
       <AnimatePresence>
         {selectedProduct && (
@@ -1051,12 +975,12 @@ export default function Shop() {
                   {/* Price */}
                   <div className="flex items-center gap-3">
                     <span className="text-3xl font-bold text-amber-500">
-                      ${selectedProduct.price}
+                      {selectedProduct.price} DH
                     </span>
                     {selectedProduct.originalPrice && (
                       <>
                         <span className="text-xl text-gray-500 line-through">
-                          ${selectedProduct.originalPrice}
+                          {selectedProduct.originalPrice} DH
                         </span>
                         <span className="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs font-bold">
                           -{Math.round(((selectedProduct.originalPrice - selectedProduct.price) / selectedProduct.originalPrice) * 100)}%
@@ -1093,9 +1017,9 @@ export default function Shop() {
                     </button>
 
                     <button
-                      onClick={() => toggleFavorite(selectedProduct.id)}
+                      onClick={() => handleToggleFavorite(selectedProduct.id)}
                       className={`w-full py-2.5 border rounded font-semibold transition-colors text-sm ${
-                        favorites.includes(selectedProduct.id)
+                        isFavorite(selectedProduct.id)
                           ? "border-red-500 text-red-500 hover:bg-red-500/10"
                           : "border-amber-600/50 text-amber-500 hover:border-amber-500"
                       }`}
@@ -1103,12 +1027,12 @@ export default function Shop() {
                       <span className="flex items-center justify-center gap-2">
                         <Heart
                           className={`w-4 h-4 ${
-                            favorites.includes(selectedProduct.id)
+                            isFavorite(selectedProduct.id)
                               ? "fill-red-500"
                               : ""
                           }`}
                         />
-                        {favorites.includes(selectedProduct.id)
+                        {isFavorite(selectedProduct.id)
                           ? "Retirer des favoris"
                           : "Ajouter aux favoris"}
                       </span>
