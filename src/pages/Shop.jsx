@@ -1,16 +1,15 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, ShoppingCart, Star, Filter, X, Heart, Minus, Plus, Trash2, SlidersHorizontal, ChevronDown, ChevronLeft, ChevronRight, SortAsc, SortDesc, ArrowLeft } from "lucide-react"
-import { useNavigate } from "react-router-dom"
+import { Search, ShoppingCart, Star, Filter, X, Heart, Minus, Plus, Trash2, SlidersHorizontal, ChevronDown, ChevronLeft, ChevronRight, SortAsc, SortDesc } from "lucide-react"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import ScrollToTop from "../components/ScrollToTop"
+import Breadcrumb from "../components/Breadcrumb"
 import { useCart } from "../context/CartContext"
 import { useFavorites } from "../context/FavoritesContext"
 import { productsData as sharedProductsData, categories as sharedCategories } from "../data/productsData"
 
 export default function Shop() {
-  const navigate = useNavigate()
   const [products, setProducts] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
   const [selectedCategory, setSelectedCategory] = useState("all")
@@ -320,19 +319,15 @@ export default function Shop() {
             transition={{ duration: 0.6 }}
             className="mb-8"
           >
-            <button
-              onClick={() => navigate(-1)}
-              className="flex items-center gap-2 text-amber-400 hover:text-amber-300 transition-colors mb-4 group"
-            >
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span className="text-sm font-medium">Retour</span>
-            </button>
+            <Breadcrumb 
+              items={[
+                { label: "Home", path: "/" },
+                { label: "Shop" }
+              ]} 
+            />
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
               Shop
             </h1>
-            <p className="text-gray-400 text-sm">
-              Home / Shop
-            </p>
           </motion.div>
 
         </div>

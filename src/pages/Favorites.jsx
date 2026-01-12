@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, ShoppingCart, Star, Heart, X, Trash2, ArrowLeft } from "lucide-react"
-import { Link, useNavigate } from "react-router-dom"
+import { Search, ShoppingCart, Star, Heart, X, Trash2 } from "lucide-react"
+import { Link } from "react-router-dom"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import ScrollToTop from "../components/ScrollToTop"
+import Breadcrumb from "../components/Breadcrumb"
 import { useCart } from "../context/CartContext"
 import { useFavorites } from "../context/FavoritesContext"
 import { productsData, categories } from "../data/productsData"
 
 export default function Favorites() {
-  const navigate = useNavigate()
   const { favorites = [], toggleFavorite, isFavorite, clearFavorites, isLoaded } = useFavorites()
   const { addToCart: addToCartContext, setShowCartSidebar } = useCart()
   const [favoriteProducts, setFavoriteProducts] = useState([])
@@ -160,13 +160,12 @@ export default function Favorites() {
             transition={{ duration: 0.6 }}
             className="mb-8"
           >
-            <button
-              onClick={() => navigate(-1)}
-              className="flex items-center gap-2 text-amber-400 hover:text-amber-300 transition-colors mb-4 group"
-            >
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span className="text-sm font-medium">Retour</span>
-            </button>
+            <Breadcrumb 
+              items={[
+                { label: "Home", path: "/" },
+                { label: "Favorites" }
+              ]} 
+            />
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div>
                 <h1 className="text-4xl md:text-5xl font-bold text-white mb-2 flex items-center gap-3">

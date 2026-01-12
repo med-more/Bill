@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { Home, Mail, Shield, FileText, Map } from "lucide-react"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
+import Breadcrumb from "../components/Breadcrumb"
 
 export default function Sitemap() {
   const mainPages = [
@@ -59,6 +60,19 @@ export default function Sitemap() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 }}
+                className="mb-4 flex justify-center"
+              >
+                <Breadcrumb 
+                  items={[
+                    { label: "Home", path: "/" },
+                    { label: "Sitemap" }
+                  ]} 
+                />
+              </motion.div>
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

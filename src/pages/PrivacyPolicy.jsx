@@ -1,6 +1,7 @@
 import { motion } from "framer-motion"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
+import Breadcrumb from "../components/Breadcrumb"
 
 export default function PrivacyPolicy() {
   return (
@@ -39,6 +40,19 @@ export default function PrivacyPolicy() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 }}
+                className="mb-4 flex justify-center"
+              >
+                <Breadcrumb 
+                  items={[
+                    { label: "Home", path: "/" },
+                    { label: "Privacy Policy" }
+                  ]} 
+                />
+              </motion.div>
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

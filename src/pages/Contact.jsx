@@ -1,13 +1,12 @@
 import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
-import { Phone, Mail, MapPin, Clock, MessageCircle, Instagram, Facebook, Send, CheckCircle, ArrowLeft } from "lucide-react"
-import { useNavigate } from "react-router-dom"
+import { Phone, Mail, MapPin, Clock, MessageCircle, Instagram, Facebook, Send, CheckCircle } from "lucide-react"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import ScrollToTop from "../components/ScrollToTop"
+import Breadcrumb from "../components/Breadcrumb"
 
 export default function ContactPage() {
-  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -134,18 +133,17 @@ export default function ContactPage() {
               transition={{ duration: 0.6 }}
             >
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="flex justify-start mb-6"
+                className="mb-4"
               >
-                <button
-                  onClick={() => navigate(-1)}
-                  className="flex items-center gap-2 text-amber-400 hover:text-amber-300 transition-colors group"
-                >
-                  <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                  <span className="text-sm font-medium">Retour</span>
-                </button>
+                <Breadcrumb 
+                  items={[
+                    { label: "Home", path: "/" },
+                    { label: "Contact" }
+                  ]} 
+                />
               </motion.div>
               
               <motion.p
